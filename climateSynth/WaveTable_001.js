@@ -44,6 +44,8 @@ function draw() {
   // fill(255);
   textSize(40);
   text('WaveTable Demo',width/2,height/2);
+  textSize(20);
+  text('Global Temperature & CO 2 Emission FM-ing each other',width/4,height * 0.75);
 
 
   analyser.getByteFrequencyData(dataArray);
