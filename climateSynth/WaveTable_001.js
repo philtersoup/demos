@@ -26,8 +26,8 @@ function setup() {
   lpf.freq(500);
   lpf.connect(analyser);
 
-  waveOsc1 = new wtOscillator('/JSON/Global_Temperature.json');
-  waveOsc2 = new wtOscillator('/JSON/CO2_Emissions.json');
+  waveOsc1 = new wtOscillator('/Global_Temperature.json');
+  waveOsc2 = new wtOscillator('/CO2_Emissions.json');
   // waveOsc3 = new wtOscillator('/JSON/Antarctic_Ice.json');
 
   waveOsc2.gain.disconnect();
