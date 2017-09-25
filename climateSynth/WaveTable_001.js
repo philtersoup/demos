@@ -10,7 +10,7 @@ var scales = [
 
 ];
 
-var ac,waveOsc1,waveOsc2,waveOsc3,lpf;
+var ac,waveOsc1,waveOsc2,waveOsc3,lpf,verb,delay;
 var analyser, bufferLength, dataArray;
 
 function setup() {
@@ -24,17 +24,35 @@ function setup() {
 
   lpf = new p5.LowPass();
   lpf.freq(500);
+  lpf.amp(0.5);
+  lpf.disconnect();
   lpf.connect(analyser);
 
-  waveOsc1 = new wtOscillator('JSON/globalTemperature.json');
-  waveOsc2 = new wtOscillator('JSON/CO2.json');
+  verb = new p5.Reverb();
+
+  verb.process(lpf,3,1);
+  verb.drywet(0.5);
+
+  delay = new p5.Delay();
+  delay.setType('pingpong');
+  delay.process(lpf,0.7,0.5);
+  delay.drywet(0.5);
+
+  waveOsc1 = new wtOscillator('JSON/globalTemperature.json',32);
+  waveOsc2 = new wtOscillator('JSON/CO2.json',64);
+  waveOsc3 = new wtOscillator('JSON/seaIce.json',32);
   // waveOsc3 = new wtOscillator('/JSON/Antarctic_Ice.json');
+  waveOsc1.gain.gain.setvalue = 0.25;
 
   waveOsc2.gain.disconnect();
   waveOsc2.gain.connect(waveOsc1.osc.frequency);
   waveOsc2.osc.connect(lpf.biquad.frequency);
   waveOsc2.osc.frequency.value = 1;
-  waveOsc2.gain.gain.value = 15000;
+  waveOsc2.gain.gain.value = 1500;
+
+  waveOsc2.gain.connect(waveOsc3.osc.frequency);
+  waveOsc3.gain.gain.setValue = 0.25;
+  waveOsc3.gain.connect(waveOsc2.osc.frequency);
 
 
 }
@@ -49,6 +67,13 @@ function draw() {
 
   analyser.getByteFrequencyData(dataArray);
 
+  // for(var i = 0; i < 15; i++){
+  //   noStroke();
+  //   fill(dataArray[(i)*40]/2)
+  //   rect(0,height/(i),width,height/i);
+  // }
+
+
   noFill();
   beginShape();
   stroke(255,0,0); // waveform is red
@@ -57,8 +82,12 @@ function draw() {
     var x = map(i, 0, dataArray.length, 0, width*8);
     var y = map( dataArray[i], 0, 128, height/2, height/4);
     vertex(x,y);
+    // fill(dataArray[i]);
+    // rect(x,y,width/dataArray.length,height);
   }
   endShape();
+
+
 
   var index = floor((2.71828/3* mouseX/width * scales[scaleNo].length));
   var note = 12 + 12 * floor(2 + (mouseY/height))+scales[scaleNo][index];
@@ -66,16 +95,18 @@ function draw() {
   waveOsc2.gain.gain.value = 15000 * mouseY/height;
   waveOsc1.update(midiToFreq(note + 12));
   waveOsc2.update(midiToFreq(note + 7 ));
+  waveOsc3.update(midiToFreq(note + 24));
   // waveOsc3.update(midiToFreq(-12 + note + 7));
 
 }
 
 
-function wtOscillator(dataSource){
+function wtOscillator(dataSource,len){
 
   //create a new Oscillator & dataSet
   this.osc = ac.createOscillator();
   this.gain = ac.createGain();
+  this.buflen = len;
   this.gain.connect(lpf);
 
   // this.osc.connect(this.gain);
@@ -85,21 +116,22 @@ function wtOscillator(dataSource){
   var that = this;  //for scope issues
 
   loadJSON(dataSource,function(data){
-  // dataset.global_temp = data;
-
-    for(var k in data) {
+      for(var k in data) {
       //  globalTemp_wavTB.push(dataset.global_temp[k].normz)
 
       that.data.push(data[k].val2);
       // console.log(data[k].normz);
       }
     // console.log(that.data.length)
-    var real = [], img = [];
-    for(var i = 0; i < 32; i++){
+    var real = new Float32Array(that.buflen), img = new Float32Array(that.buflen);
+    // console.log(real,img);
+    for(var i = 0; i < that.buflen; i++){
         real[i] = that.data[i];
         img[i] = 0;
+        // console.log(that.data[i]);
       }
-    var wave = ac.createPeriodicWave(real,img);
+      console.log(real,img);
+    var wave = ac.createPeriodicWave(real,img,{disableNormalization: true});
     that.osc.setPeriodicWave(wave);
     that.osc.connect(that.gain);
     // that.gain.connect(lpf);
