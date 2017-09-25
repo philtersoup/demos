@@ -26,12 +26,13 @@ function setup() {
   lpf.freq(500);
   lpf.connect(analyser);
 
-  waveOsc1 = new wtOscillator('JSON/Global_Temperature.json');
-  waveOsc2 = new wtOscillator('JSON/CO2_Emissions.json');
+  waveOsc1 = new wtOscillator('JSON/globalTemperature.json');
+  waveOsc2 = new wtOscillator('JSON/CO2.json');
   // waveOsc3 = new wtOscillator('/JSON/Antarctic_Ice.json');
 
   waveOsc2.gain.disconnect();
   waveOsc2.gain.connect(waveOsc1.osc.frequency);
+  waveOsc2.osc.connect(lpf.biquad.frequency);
   waveOsc2.osc.frequency.value = 1;
   waveOsc2.gain.gain.value = 15000;
 
@@ -44,8 +45,6 @@ function draw() {
   // fill(255);
   textSize(40);
   text('WaveTable Demo',width/2,height/2);
-  textSize(20);
-  text('Global Temperature & CO 2 Emission FM-ing each other',width/4,height * 0.75);
 
 
   analyser.getByteFrequencyData(dataArray);
@@ -91,9 +90,10 @@ function wtOscillator(dataSource){
     for(var k in data) {
       //  globalTemp_wavTB.push(dataset.global_temp[k].normz)
 
-      that.data.push(data[k].normz);
+      that.data.push(data[k].val2);
       // console.log(data[k].normz);
       }
+    // console.log(that.data.length)
     var real = [], img = [];
     for(var i = 0; i < 32; i++){
         real[i] = that.data[i];
