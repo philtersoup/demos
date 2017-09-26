@@ -24,14 +24,14 @@ function setup() {
 
   lpf = new p5.LowPass();
   lpf.freq(500);
-  lpf.amp(0.5);
+  lpf.amp(0.25);
   lpf.disconnect();
   lpf.connect(analyser);
 
   verb = new p5.Reverb();
 
   verb.process(lpf,3,1);
-  verb.drywet(0.5);
+  verb.drywet(0.75);
 
   delay = new p5.Delay();
   delay.setType('pingpong');
@@ -52,7 +52,7 @@ function setup() {
 
   waveOsc2.gain.connect(waveOsc3.osc.frequency);
   waveOsc3.gain.gain.setValue = 0.25;
-  waveOsc3.gain.connect(waveOsc2.osc.frequency);
+  waveOsc3.gain.connect(waveOsc1.osc.frequency);
 
 
 }
@@ -67,25 +67,25 @@ function draw() {
 
   analyser.getByteFrequencyData(dataArray);
 
-  // for(var i = 0; i < 15; i++){
-  //   noStroke();
-  //   fill(dataArray[(i)*40]/2)
-  //   rect(0,height/(i),width,height/i);
-  // }
-
-
-  noFill();
-  beginShape();
-  stroke(255,0,0); // waveform is red
-  strokeWeight(1);
-  for (var i = 0; i< dataArray.length; i++){
-    var x = map(i, 0, dataArray.length, 0, width*8);
-    var y = map( dataArray[i], 0, 128, height/2, height/4);
-    vertex(x,y);
-    // fill(dataArray[i]);
-    // rect(x,y,width/dataArray.length,height);
+  for(var i = 0; i < 15; i++){
+    noStroke();
+    fill(dataArray[(i)*40]/2)
+    rect(0,height/(i),width,height/i);
   }
-  endShape();
+
+
+  // noFill();
+  // beginShape();
+  // stroke(255,0,0); // waveform is red
+  // strokeWeight(1);
+  // for (var i = 0; i< dataArray.length; i++){
+  //   var x = map(i, 0, dataArray.length, 0, width*8);
+  //   var y = map( dataArray[i], 0, 128, height/2, height/4);
+  //   vertex(x,y);
+  //   // fill(dataArray[i]);
+  //   // rect(x,y,width/dataArray.length,height);
+  // }
+  // endShape();
 
 
 
