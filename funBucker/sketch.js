@@ -13,9 +13,10 @@ function preload(){
 function loadFiles(){
   for(var i = 0; i<6; i++){
     mySound = loadSound('audio/'+ (i+1) +'.mp3');
-    mySound.setVolume(0.1);
+    mySound.setVolume(0.5);
     mySound.playMode('restart');
-    if(i<4)
+    mySound.state = 0;
+    if(i<2)
       mySound.canPause = false;
     else {
       mySound.canPause = true;
@@ -32,45 +33,58 @@ var col = color(0,0);
 
 createCanvas(windowWidth,windowHeight);
 
-for(var i = 0; i<6; i++){
+  for(var i = 0; i<6; i++){
 
-  var button = createButton("Sound "+(i+1));
-  button.style("background-color", col);
-  button.id(i);
-  button.position(i * width/6 , height/2);
-  button.mousePressed(function(i){
-  var id = this.elt.id;
+    var button = createButton("Sound "+(i+1));
+    button.style("background-color", col);
+    button.id(i);
 
-  playSound(id);
+    button.position(i * width/6 , height/2);
 
-  });
+    // button.doubleClicked(function(){
+    //
+    // console.log(id);
+    // // playSound(id);
+    // });
 
-  buttonArray.push(button);
-}
+    button.mousePressed(function(){
+    var id = this.elt.id;
+    playSound(id);
+    });
+    buttonArray.push(button);
+  }
 // audioArray[0].setVolume(0.1);
 // audioArray[0].play();
 background(127);
 }
 
-function playSound(i){
-
-  // playing = true;
-
-  for(var j = 0; j<6 ; j++){
-      // console.log(audioArray[j].isPlaying(),playing);
-      if(audioArray[j].isPlaying()){
-        playing = true;
-        if(audioArray[j].canPause || j == 2) audioArray[j].pause();
-        break;
-
-      }
-      else playing = false;
-
-  }
-  if(playing==false){
+function playSound(id){
+  if(id>999) {
+    i = id-1000;
+    console.log(i)
+    audioArray[i].jump(0,0.1);
     audioArray[i].play();
-    playing = true;
+  }
+  else {
+    i = id;
+    console.log(i)
+    if(audioArray[i].isPlaying()){
+      if(audioArray[i].canPause){
+        audioArray[i].pause();
+      }
+      else {
+        audioArray[i].stop();
+      }
     }
+    else {
+      for(var j=0; j<6; j++){
+        if (audioArray[j].isPlaying())
+          audioArray[j].stop();
+      }
+      audioArray[i].play();
+    }
+  }
+
 }
 
 function draw(){
@@ -107,4 +121,8 @@ function keyPressed() {
 
 
   }
+}
+
+function doubleClicked(){
+  console.log('wha');
 }
