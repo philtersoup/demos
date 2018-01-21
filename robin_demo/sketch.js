@@ -4,7 +4,7 @@ var dance_gif;
 
 function preload(){
 
-  data = loadJSON("/data.JSON");
+  data = loadJSON("https://raw.githubusercontent.com/philtersoup/demos/gh-pages/robin_demo/data.json");
   console.log(data);
   dance_gif = createImg("https://media.giphy.com/media/xUNda2WPq6to9fmyIM/giphy.gif");
   dance_gif.hide();
