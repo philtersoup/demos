@@ -16,7 +16,7 @@ var data = {
 function preload(){
 
   // data = loadJSON('data/data.JSON');
-  
+
   dance_gif = createImg("https://media.giphy.com/media/xUNda2WPq6to9fmyIM/giphy.gif");
   dance_gif.hide();
 }
