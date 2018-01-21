@@ -4,7 +4,7 @@ var dance_gif;
 
 function preload(){
 
-  data = loadJSON('data/data.JSON');
+  data = loadJSON('/data/data.JSON');
   console.log(data);
   dance_gif = createImg("https://media.giphy.com/media/xUNda2WPq6to9fmyIM/giphy.gif");
   dance_gif.hide();
