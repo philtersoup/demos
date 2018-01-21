@@ -1,0 +1,16 @@
+{
+    "Questions": {
+        "1": "What is your favourite colour?",
+        "2": "What is your dream job?",
+        "3": "Do this dance:",
+        "4": "Question 4",
+        "5": "Question 5"
+    },
+    "Tasks": {
+        "1": "Question 1",
+        "2": "Question 2",
+        "3": "Question 3",
+        "4": "Question 4",
+        "5": "Question 5"
+    }
+}
