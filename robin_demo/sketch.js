@@ -1,11 +1,22 @@
-var data,input,but;
+var input,but;
 var q_idx = 1;
 var dance_gif;
 
+
+var data = {
+    "Questions": {
+        "1": "What is your favourite colour?",
+        "2": "What is your dream job?",
+        "3": "Do this dance:",
+        "4": "--EMPTY--",
+        "5": "--EMPTY--"
+    }
+};
+
 function preload(){
 
-  data = loadJSON('data/data.JSON');
-  console.log(data);
+  // data = loadJSON('data/data.JSON');
+  
   dance_gif = createImg("https://media.giphy.com/media/xUNda2WPq6to9fmyIM/giphy.gif");
   dance_gif.hide();
 }
