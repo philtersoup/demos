@@ -1,4 +1,4 @@
-var input,but;
+var input,but,mainDiv;
 var q_idx = 1;
 var dance_gif;
 
@@ -7,7 +7,7 @@ var data = {
     "Questions": {
         "1": "What is your favourite colour?",
         "2": "What is your dream job?",
-        "3": "Do this dance:",
+        "3": "To get the password, perform this dance for the whole cafe",
         "4": "--EMPTY--",
         "5": "--EMPTY--"
     }
@@ -30,51 +30,71 @@ function setup() {
   input.size(width/2,height/16);
   input.position(width/2 - input.width/2, windowHeight/2 - windowHeight/10);
 
-  but = createButton("Next");
-  but.size(width/8,height/16);
+  but = createButton("Submit");
+  but.size(width/6,height/16);
   but.style('font-size', '36');
   but.position(windowWidth/2 - but.width/2, windowHeight/2);
   but.mousePressed(update);
 }
 
 function draw() {
-  background(42, 169, 217);
+  background(3, 24, 141);
   if(dance_gif && q_idx == 3){
     dance_gif.show();
-    input.hide();
-    dance_gif.position(width/2 - dance_gif.width/2,windowHeight/2.5);
-    but.position(width/2 - but.width/2, dance_gif.height+dance_gif.y*1.1);
-    but.elt.innerHTML = "Finish";
-  }
-  for(var i = 0; i < 25; i++){
-    for(var j = 0; j < 25; j++){
-      noStroke();
-      fill(160,100);
-      ellipse(i * width/25, j * height/25, random(15,25),random(15,25));
-    }
+    input.position(width/2 - input.width/2, windowHeight - height/4.2);
+    dance_gif.position(width/2 - dance_gif.width/2,windowHeight/3);
+    but.position(width/2 - but.width/2, height - height/8);
+    but.elt.innerHTML = "Password";
   }
 
   fill(255);
-  textSize(48);
+  textSize(windowWidth/22);
 
   noStroke();
   if(data){
     textAlign(CENTER);
-    text(data.Questions[q_idx], width/2, height/3);
+    textLeading(60);
+    text(data.Questions[q_idx], width/2, 1/16*height, width,  height);
   }
 }
 
 function update(){
-  input.elt.value = '';
-  if(q_idx < 3) q_idx++;
-  else window.open("https://www.google.com");
+  if(input.elt.value == ''){
+    noStroke();
+    textAlign(CENTER);
+    textSize(24);
+    text("You must answer the question before continuing",width/2,height/1.195);
+    noLoop();
+    return false;
+  }
+  else{
+
+    loop();
+    if(q_idx < 3) q_idx++;
+    // else if(q_idx >=3 && input.elt.value != "mentos") text("Enter password",width/2,height/1.195);
+    else if(q_idx >=3 && input.elt.value == "mentos") window.open("https://www.google.com");
+    input.elt.value = '';
+    noLoop();
+  }
+
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  input.size(250,50);
-  input.position(width/2 - input.width/2, windowHeight/2 - 70);
+  if(q_idx>=3){
+  input.position(width/2 - input.width/2, windowHeight - height/4.2);
+  input.size(width/2,height/16);
+  but.position(width/2 - but.width/2, height - height/8);
+  but.size(width/6,height/16);
+  but.style('font-size', width/36);
+  }
+  else{
 
-  but.position(windowWidth/2 - but.width/2, windowHeight/2);
-  but.size(100,25);
+    input.size(width/2,height/16);
+    input.position(width/2 - input.width/2, windowHeight/2 - windowHeight/10);
+
+    but.size(width/6,height/12);
+    but.style('font-size', width/36);
+    but.position(windowWidth/2 - but.width/2, windowHeight/2);
+  }
 }
