@@ -1,8 +1,12 @@
 var clock, reset, amplitude, fft;
 var clockF, resetD;
+var slider;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  slider = createSlider(0.1, 20, 1);
+  slider.position(width/2, height/2);
+  slider.style('width', '180px');
 
   clock = new p5.Oscillator();
   clock.setType('square');
@@ -33,6 +37,12 @@ function setup() {
 function draw() {
   background(0,30);
   var waveform = fft.waveform();
+
+  clockF = slider.value();
+
+  clock.freq(clockF);
+  reset.freq(clockF/resetD);
+
   noFill();
   beginShape();
   stroke(255,0,0); // waveform is red
