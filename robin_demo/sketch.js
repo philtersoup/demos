@@ -76,7 +76,6 @@ function update(){
     input.elt.value = '';
     noLoop();
   }
-
 }
 
 function windowResized() {
