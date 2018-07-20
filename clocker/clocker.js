@@ -13,7 +13,7 @@ function setup() {
   amplitude = new p5.Amplitude();
   amplitude.toggleNormalize(false);
 
-  clockF = 1.0;
+  clockF = 2.0;
   resetD = 4;
 
   clock.freq(clockF);
